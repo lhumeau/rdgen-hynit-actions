@@ -43,6 +43,7 @@ env:
   ANDROID_SIGNING_KEY: "${{ secrets.ANDROID_SIGNING_KEY }}"
   MACOS_P12_BASE64: "${{ secrets.MACOS_P12_BASE64 }}"
   UPLOAD_ARTIFACT: 'true'
+  UPLOAD_TO_RDGEN: 'false'
   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
   STATUS_URL: "${{ secrets.GENURL }}/updategh"
 
@@ -732,8 +733,17 @@ jobs:
         run: |
           cp ./res/rustdesk-${{ env.VERSION }}-0-x86_64.pkg.tar.zst ./output/${{ env.filename }}-${{ matrix.job.arch }}.pkg.tar.zst
 
+      - name: Upload HYNIT Linux x64 DEB
+        uses: actions/upload-artifact@v4
+        if: ${{ env.UPLOAD_ARTIFACT == 'true' && matrix.job.arch == 'x86_64' }}
+        with:
+          name: publish-linux-x86_64-deb
+          path: ./output/${{ env.filename }}-x86_64.deb
+          if-no-files-found: error
+          retention-days: 1
+
       - name: send file to rdgen server
-        if: ${{ env.rdgen == 'true' }}
+        if: ${{ env.rdgen == 'true' && env.UPLOAD_TO_RDGEN == 'true' }}
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 10
@@ -1310,7 +1320,7 @@ jobs:
             done
 
       - name: send file to rdgen server
-        if: ${{ env.rdgen == 'true' }}
+        if: ${{ env.rdgen == 'true' && env.UPLOAD_TO_RDGEN == 'true' }}
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 10
@@ -1478,8 +1488,17 @@ jobs:
           sudo mv "$src" "./$dest"
           popd
 
+      - name: Upload HYNIT Linux x64 AppImage
+        uses: actions/upload-artifact@v4
+        if: ${{ env.UPLOAD_ARTIFACT == 'true' && matrix.job.arch == 'x86_64' }}
+        with:
+          name: publish-linux-x86_64-appimage
+          path: ./appimage/${{ env.filename }}-x86_64.AppImage
+          if-no-files-found: error
+          retention-days: 1
+
       - name: send file to rdgen server
-        if: ${{ env.rdgen == 'true' }}
+        if: ${{ env.rdgen == 'true' && env.UPLOAD_TO_RDGEN == 'true' }}
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 10
@@ -1638,7 +1657,7 @@ jobs:
             flatpak build-bundle ./repo ${{ env.filename }}-${{ matrix.job.arch }}.flatpak "$BUNDLE_ID"
 
       - name: send file to rdgen server
-        if: ${{ env.rdgen == 'true' }}
+        if: ${{ env.rdgen == 'true' && env.UPLOAD_TO_RDGEN == 'true' }}
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 10

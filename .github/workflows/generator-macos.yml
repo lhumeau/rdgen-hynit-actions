@@ -42,6 +42,7 @@ env:
   ANDROID_SIGNING_KEY: "${{ secrets.ANDROID_SIGNING_KEY }}"
   MACOS_P12_BASE64: "${{ secrets.MACOS_P12_BASE64 }}"
   UPLOAD_ARTIFACT: 'true'
+  UPLOAD_TO_RDGEN: 'false'
   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
 
 jobs:
@@ -785,8 +786,17 @@ jobs:
             exit 1
           fi
 
+      - name: Upload HYNIT macOS installer
+        uses: actions/upload-artifact@v4
+        if: env.UPLOAD_ARTIFACT == 'true'
+        with:
+          name: publish-macos-${{ matrix.job.arch }}
+          path: ${{ env.filename }}-${{ matrix.job.arch }}.dmg
+          if-no-files-found: error
+          retention-days: 1
+
       - name: send file to rdgen server
-        if: ${{ env.rdgen == 'true' }}
+        if: ${{ env.rdgen == 'true' && env.UPLOAD_TO_RDGEN == 'true' }}
         shell: bash
         run: |
           curl -i -X POST \
