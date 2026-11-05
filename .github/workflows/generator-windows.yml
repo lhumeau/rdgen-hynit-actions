@@ -19,6 +19,10 @@ on:
         default: ''
         type: string
 
+permissions:
+  actions: read
+  contents: read
+
 
 env:
   SCITER_RUST_VERSION: "1.75" # https://github.com/rustdesk/rustdesk/discussions/7503, also 1.78 has ABI change which causes our sciter version not working, https://blog.rust-lang.org/2024/03/30/i128-layout-update.html
@@ -54,11 +58,6 @@ jobs:
       zip_url_json: ${{ inputs.zip_url }}
     secrets: inherit
 
-  generate-bridge:
-    uses: ./.github/workflows/bridge.yml
-    with:
-      version: ${{ inputs.version }}
-
   build-RustDeskTempTopMostWindow:
     needs: setup
     uses: ./.github/workflows/third-party-RustDeskTempTopMostWindow.yml
@@ -75,7 +74,7 @@ jobs:
 
   build-for-windows-flutter:
     name: Build Windows
-    needs: [build-RustDeskTempTopMostWindow, generate-bridge, setup]
+    needs: [build-RustDeskTempTopMostWindow, setup]
     runs-on: ${{ matrix.job.os }}
     strategy:
       fail-fast: false
@@ -168,9 +167,12 @@ jobs:
             --ed25519-public-key "${{ env.update_public_key }}"
 
       - name: Restore bridge files
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v4
         with:
           name: bridge-artifact
+          repository: ${{ github.repository }}
+          run-id: ${{ vars.RDGEN_BRIDGE_RUN_ID }}
+          github-token: ${{ github.token }}
           path: ./
 
       - name: Install ImageMagick on Windows
