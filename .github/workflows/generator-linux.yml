@@ -18,6 +18,11 @@ on:
         required: false
         default: ''
         type: string
+      build_drm:
+        description: 'Build the optional Linux DRM unattended-wayland package'
+        required: false
+        default: false
+        type: boolean
 
 env:
   SCITER_RUST_VERSION: "1.75" # https://github.com/rustdesk/rustdesk/discussions/7503, also 1.78 has ABI change which causes our sciter version not working, https://blog.rust-lang.org/2024/03/30/i128-layout-update.html
@@ -778,6 +783,7 @@ jobs:
           path: ./output/${{ env.filename }}-${{ matrix.job.arch }}.deb
 
   build-rustdesk-linux-drm:
+    if: ${{ inputs.build_drm }}
     needs: [generate-bridge-linux, setup]
     name: build rustdesk linux drm x86_64
     runs-on: ubuntu-22.04
@@ -1298,7 +1304,7 @@ jobs:
                 for FILE in $(echo $FILES | sed "s/\n/ /g"); do
                   sed -ie "s|rustdesk|${{ env.appname }}|g" $FILE
                 done
-                mkdir -p tmpdeb/usr/lib/rustdesk
+                mkdir -p %{buildroot}/tmpdeb/usr/lib/rustdesk
                 for file in "./res/rpm-flutter.spec" "./res/rpm-flutter-suse.spec"; do
                   sed -ie "s|^\(URL:\s*\).*|\1${{ env.downloadLink }}|g" "$file"
                   sed -ie "s|^\(Vendor:\s*\).*|\1${{ env.compname }}|g" "$file"
