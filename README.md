@@ -14,4 +14,6 @@ The RDGen server supplies the client configuration and dispatches these workflow
 
 HYNIT icon and wordmark assets live in `branding/`. The Windows, macOS, and Linux workflows embed these local assets, so build runners do not fetch logo images from RDGen during compilation.
 
+The Windows workflow also bundles the upstream `mfx_dispatch` cstdint patch in `patches/` and seeds vcpkg's download cache with its verified SHA-512. This avoids a repeated GitHub HTTP 429 for that fixed upstream patch without disabling hardware-codec support.
+
 The workflows and local actions are based on `bryangerlach/rdgen` and are licensed under GPL-3.0; see `LICENSE`.

@@ -439,6 +439,34 @@ jobs:
           vcpkgGitCommitId: ${{ env.VCPKG_COMMIT_ID }}
           doNotCache: false
 
+      - name: Seed pinned mfx-dispatch patch
+        shell: pwsh
+        run: |
+          $vcpkgRoot = 'C:\vcpkg'
+          $downloads = Join-Path $vcpkgRoot 'downloads'
+          New-Item -ItemType Directory -Force -Path $downloads | Out-Null
+          $patchName = 'fix-missing-cstdint-import-d6241243f85a0d947bdfe813006686a930edef24.patch'
+          $patchSource = Join-Path $env:GITHUB_WORKSPACE 'brand-assets\patches\mfx-dispatch-fix-missing-cstdint-import.patch'
+          $patchTarget = Join-Path $downloads $patchName
+          Copy-Item -LiteralPath $patchSource -Destination $patchTarget -Force
+
+          # vcpkg's pinned port downloads this upstream commit patch from GitHub,
+          # which rate limits hosted runners. Use the verified bundled patch.
+          $portPath = Join-Path $vcpkgRoot 'ports\mfx-dispatch\portfile.cmake'
+          $upstreamHash = '5d2ffc4ec2ba0e5859d01d2e072f75436ebc3e62e0f6580b5bb8b9f82fe588e7558a46a1fdfa0297a782c0eeb8f50322258d0dd9e41d927cc9be496727b61e44'
+          $bundledHash = 'a9c4e7029898f00142e0fe17c072cdef2f600d5e6d50d13387307022ec9c8c424934c8e9502039e33cd335b496b7bfbc151e4e9b8222af7b0d895902eaa02b90'
+          $portText = [System.IO.File]::ReadAllText($portPath)
+          if ($portText.Contains($upstreamHash)) {
+            $portText = $portText.Replace($upstreamHash, $bundledHash)
+            $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+            [System.IO.File]::WriteAllText($portPath, $portText, $utf8NoBom)
+          } elseif (-not $portText.Contains($bundledHash)) {
+            throw 'Unexpected mfx-dispatch port hash; stop instead of accepting an unverified patch.'
+          }
+          $actualHash = (Get-FileHash -Algorithm SHA512 -LiteralPath $patchTarget).Hash.ToLowerInvariant()
+          if ($actualHash -ne $bundledHash) { throw 'Bundled mfx-dispatch patch checksum mismatch.' }
+          Write-Host 'Seeded vcpkg download cache with the pinned mfx-dispatch patch.'
+
       - name: Install vcpkg dependencies
         env:
           VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.job.vcpkg-triplet }}
