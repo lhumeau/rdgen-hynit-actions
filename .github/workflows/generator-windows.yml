@@ -448,7 +448,9 @@ jobs:
           $patchName = 'fix-missing-cstdint-import-d6241243f85a0d947bdfe813006686a930edef24.patch'
           $patchSource = Join-Path $env:GITHUB_WORKSPACE 'brand-assets\patches\mfx-dispatch-fix-missing-cstdint-import.patch'
           $patchTarget = Join-Path $downloads $patchName
-          Copy-Item -LiteralPath $patchSource -Destination $patchTarget -Force
+          $patchText = [System.IO.File]::ReadAllText($patchSource).Replace("`r`n", "`n")
+          $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+          [System.IO.File]::WriteAllText($patchTarget, $patchText, $utf8NoBom)
 
           # vcpkg's pinned port downloads this upstream commit patch from GitHub,
           # which rate limits hosted runners. Use the verified bundled patch.
