@@ -645,7 +645,7 @@ jobs:
         run: |
           ASSETS_DIR="build/macos/Build/Products/Release/RustDesk.app/Contents/Frameworks/App.framework/Versions/Current/Resources/flutter_assets/assets"
           mkdir -p "$ASSETS_DIR"
-          cp ./brand-assets/branding/hynit-wordmark.png "$ASSETS_DIR/logo.png"
+          cp ./brand-assets/branding/hynit-mark.png "$ASSETS_DIR/logo.png"
 
       - name: Sign macOS app bundle
         if: env.MACOS_P12_BASE64 != ''

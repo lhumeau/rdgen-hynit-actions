@@ -12,7 +12,7 @@ Optional fallback: `RDGEN_ZIP_URL` can hold a temporary presigned GET URL for th
 
 The RDGen server supplies the client configuration and dispatches these workflows. The workflows upload installer outputs as short-lived GitHub artifacts instead of posting through the Cloudflare-protected RDGen hostname. The operator downloads and publishes the verified installers to Contabo S3 bucket `software` using Agency presigned PUTs.
 
-HYNIT icon and wordmark assets live in `branding/`. The Windows, macOS, and Linux workflows embed these local assets, so build runners do not fetch logo images from RDGen during compilation.
+The current HYNIT mark and app icon, sourced from Lotería’s active `hynit-mark.svg`, live in `branding/`. The Windows, macOS, and Linux workflows embed the current local HYNIT mark and icon, so build runners do not fetch logo images from RDGen during compilation.
 
 The Windows and Linux workflows bundle the upstream `mfx_dispatch` cstdint patch in `patches/` and seed vcpkg's download cache with its verified SHA-512. This avoids repeated GitHub HTTP 429 responses for that fixed upstream patch without disabling hardware-codec support.
 

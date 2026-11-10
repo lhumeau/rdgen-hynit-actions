@@ -638,7 +638,7 @@ jobs:
             export DEB_ARCH=${{ matrix.job.deb_arch }}
             mkdir -p flutter/tmpdeb/usr/share/rustdesk
             cp ./custom_.txt ./flutter/tmpdeb/usr/share/rustdesk/custom_.txt
-            cp ./brand-assets/branding/hynit-wordmark.png ./flutter/assets/logo.png
+            cp ./brand-assets/branding/hynit-mark.png ./flutter/assets/logo.png
             mv ./flutter/assets/icon.svg ./flutter/assets/icon.svg.bak
             convert ./res/icon.png ./flutter/assets/icon.svg
             convert ./res/128x128.png -resize 200% ./flutter/assets/128x128@2x.png || true
@@ -1319,7 +1319,7 @@ jobs:
             export DEB_ARCH=amd64
             mkdir -p flutter/tmpdeb/usr/share/rustdesk
             cp ./custom_.txt ./flutter/tmpdeb/usr/share/rustdesk/custom_.txt
-            cp ./brand-assets/branding/hynit-wordmark.png ./flutter/assets/logo.png
+            cp ./brand-assets/branding/hynit-mark.png ./flutter/assets/logo.png
             mv ./flutter/assets/icon.svg ./flutter/assets/icon.svg.bak
             convert ./res/icon.png ./flutter/assets/icon.svg
             convert ./res/128x128.png -resize 200% ./flutter/assets/128x128@2x.png || true

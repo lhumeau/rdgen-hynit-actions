@@ -668,7 +668,7 @@ jobs:
           shell: pwsh
           continue_on_error: true
           command: |
-            Copy-Item -LiteralPath "./brand-assets/branding/hynit-wordmark.png" -Destination ./rustdesk/data/flutter_assets/assets/logo.png -Force
+            Copy-Item -LiteralPath "./brand-assets/branding/hynit-mark.png" -Destination ./rustdesk/data/flutter_assets/assets/logo.png -Force
 
       - name: find Runner.res
         # Windows: find Runner.res (compiled from ./flutter/windows/runner/Runner.rc), copy to ./Runner.res
