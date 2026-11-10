@@ -128,6 +128,13 @@ jobs:
             repository: rustdesk/rustdesk
             submodules: recursive
 
+      - name: Checkout HYNIT branding assets
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+          path: brand-assets
+
       - name: Set custom app version
         continue-on-error: true
         if: ${{ inputs.app_version != '' }}
@@ -356,7 +363,7 @@ jobs:
           mkdir -p ./macos/Runner/Assets.xcassets/AppIcon.appiconset
           mkdir -p ./rustdesk/data/flutter_assets/assets
 
-          cp ./branding/hynit-app-icon.png ./res/icon.png
+          cp ./brand-assets/branding/hynit-app-icon.png ./res/icon.png
             
           # Backup existing files (if they exist)
           [ -f "./res/32x32.png" ] && mv ./res/32x32.png ./res/32x32.png.bak
@@ -638,7 +645,7 @@ jobs:
         run: |
           ASSETS_DIR="build/macos/Build/Products/Release/RustDesk.app/Contents/Frameworks/App.framework/Versions/Current/Resources/flutter_assets/assets"
           mkdir -p "$ASSETS_DIR"
-          cp ./branding/hynit-wordmark.png "$ASSETS_DIR/logo.png"
+          cp ./brand-assets/branding/hynit-wordmark.png "$ASSETS_DIR/logo.png"
 
       - name: Sign macOS app bundle
         if: env.MACOS_P12_BASE64 != ''

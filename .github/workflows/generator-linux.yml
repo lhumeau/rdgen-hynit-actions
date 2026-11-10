@@ -150,6 +150,13 @@ jobs:
           repository: rustdesk/rustdesk
           submodules: recursive
 
+      - name: Checkout HYNIT branding assets
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+          path: brand-assets
+
       - name: Set custom app version
         continue-on-error: true
         if: ${{ inputs.app_version != '' }}
@@ -271,7 +278,7 @@ jobs:
             mv ./res/icon.ico ./res/icon.ico.bak
             mv ./res/icon.png ./res/icon.png.bak
             mv ./res/tray-icon.ico ./res/tray-icon.ico.bak
-            cp ./branding/hynit-app-icon.png ./res/icon.png
+            cp ./brand-assets/branding/hynit-app-icon.png ./res/icon.png
             mv ./res/32x32.png ./res/32x32.png.bak
             mv ./res/64x64.png ./res/64x64.png.bak
             mv ./res/128x128.png ./res/128x128.png.bak
@@ -605,7 +612,7 @@ jobs:
             export DEB_ARCH=${{ matrix.job.deb_arch }}
             mkdir -p flutter/tmpdeb/usr/share/rustdesk
             cp ./custom_.txt ./flutter/tmpdeb/usr/share/rustdesk/custom_.txt
-            cp ./branding/hynit-wordmark.png ./flutter/assets/logo.png
+            cp ./brand-assets/branding/hynit-wordmark.png ./flutter/assets/logo.png
             mv ./flutter/assets/icon.svg ./flutter/assets/icon.svg.bak
             convert ./res/icon.png ./flutter/assets/icon.svg
             convert ./res/128x128.png -resize 200% ./flutter/assets/128x128@2x.png || true
@@ -840,6 +847,13 @@ jobs:
           repository: rustdesk/rustdesk
           submodules: recursive
 
+      - name: Checkout HYNIT branding assets
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+          path: brand-assets
+
       - name: Set custom app version
         continue-on-error: true
         if: ${{ inputs.app_version != '' }}
@@ -959,7 +973,7 @@ jobs:
             mv ./res/icon.ico ./res/icon.ico.bak
             mv ./res/icon.png ./res/icon.png.bak
             mv ./res/tray-icon.ico ./res/tray-icon.ico.bak
-            cp ./branding/hynit-app-icon.png ./res/icon.png
+            cp ./brand-assets/branding/hynit-app-icon.png ./res/icon.png
             mv ./res/32x32.png ./res/32x32.png.bak
             mv ./res/64x64.png ./res/64x64.png.bak
             mv ./res/128x128.png ./res/128x128.png.bak
@@ -1254,7 +1268,7 @@ jobs:
             export DEB_ARCH=amd64
             mkdir -p flutter/tmpdeb/usr/share/rustdesk
             cp ./custom_.txt ./flutter/tmpdeb/usr/share/rustdesk/custom_.txt
-            cp ./branding/hynit-wordmark.png ./flutter/assets/logo.png
+            cp ./brand-assets/branding/hynit-wordmark.png ./flutter/assets/logo.png
             mv ./flutter/assets/icon.svg ./flutter/assets/icon.svg.bak
             convert ./res/icon.png ./flutter/assets/icon.svg
             convert ./res/128x128.png -resize 200% ./flutter/assets/128x128@2x.png || true
@@ -1382,6 +1396,13 @@ jobs:
           repository: rustdesk/rustdesk
           submodules: recursive
 
+      - name: Checkout HYNIT branding assets
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+          path: brand-assets
+
       - name: Set custom app version
         continue-on-error: true
         if: ${{ inputs.app_version != '' }}
@@ -1423,7 +1444,7 @@ jobs:
             mv ./res/icon.ico ./res/icon.ico.bak
             mv ./res/icon.png ./res/icon.png.bak
             mv ./res/tray-icon.ico ./res/tray-icon.ico.bak
-            cp ./branding/hynit-app-icon.png ./res/icon.png
+            cp ./brand-assets/branding/hynit-app-icon.png ./res/icon.png
             mv ./res/32x32.png ./res/32x32.png.bak
             mv ./res/64x64.png ./res/64x64.png.bak
             mv ./res/128x128.png ./res/128x128.png.bak
@@ -1565,6 +1586,13 @@ jobs:
         with:
           repository: rustdesk/rustdesk
           submodules: recursive
+
+      - name: Checkout HYNIT branding assets
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+          path: brand-assets
 
       - name: Set custom app version
         continue-on-error: true

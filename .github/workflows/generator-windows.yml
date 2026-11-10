@@ -146,6 +146,13 @@ jobs:
           repository: rustdesk/rustdesk
           submodules: recursive
 
+      - name: Checkout HYNIT branding assets
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+          path: brand-assets
+
       - name: Set custom app version
         continue-on-error: true
         if: ${{ inputs.app_version != '' }}
@@ -467,7 +474,7 @@ jobs:
           retry_wait_seconds: 15
           shell: pwsh
           command: |
-            Copy-Item -LiteralPath "./branding/hynit-app-icon.png" -Destination ./res/iconx.png
+            Copy-Item -LiteralPath "./brand-assets/branding/hynit-app-icon.png" -Destination ./res/iconx.png
             mv ./res/icon.ico ./res/icon.ico.bak
             mv ./res/icon.png ./res/icon.png.bak
             mv ./res/tray-icon.ico ./res/tray-icon.ico.bak
@@ -631,7 +638,7 @@ jobs:
           shell: pwsh
           continue_on_error: true
           command: |
-            Copy-Item -LiteralPath "./branding/hynit-wordmark.png" -Destination ./rustdesk/data/flutter_assets/assets/logo.png -Force
+            Copy-Item -LiteralPath "./brand-assets/branding/hynit-wordmark.png" -Destination ./rustdesk/data/flutter_assets/assets/logo.png -Force
 
       - name: find Runner.res
         # Windows: find Runner.res (compiled from ./flutter/windows/runner/Runner.rc), copy to ./Runner.res
