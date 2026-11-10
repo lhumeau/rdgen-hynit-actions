@@ -261,7 +261,6 @@ jobs:
           key: vcpkg-linux-${{ env.VCPKG_COMMIT_ID }}-${{ matrix.job.vcpkg-triplet }}
 
       - name: icon stuff
-        if: ${{ env.iconlink_url != 'false' }}
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 5
@@ -606,22 +605,18 @@ jobs:
             export DEB_ARCH=${{ matrix.job.deb_arch }}
             mkdir -p flutter/tmpdeb/usr/share/rustdesk
             cp ./custom_.txt ./flutter/tmpdeb/usr/share/rustdesk/custom_.txt
-            if [[ "${{ env.logolink_url }}" != "false" ]]; then
-              cp ./branding/hynit-wordmark.png ./flutter/assets/logo.png
+            cp ./branding/hynit-wordmark.png ./flutter/assets/logo.png
+            mv ./flutter/assets/icon.svg ./flutter/assets/icon.svg.bak
+            convert ./res/icon.png ./flutter/assets/icon.svg
+            convert ./res/128x128.png -resize 200% ./flutter/assets/128x128@2x.png || true
+            cp ./flutter/assets/icon.svg ./res/scalable.svg
+            pushd ./flutter
+            if [[ "${{ matrix.job.arch }}" == "aarch64" ]]; then
+              export PATH="/opt/flutter-elinux/flutter/bin:$PATH"
             fi
-            if [[ "${{ env.iconlink_url }}" != "false" ]]; then
-              mv ./flutter/assets/icon.svg ./flutter/assets/icon.svg.bak
-              convert ./res/icon.png ./flutter/assets/icon.svg
-              convert ./res/128x128.png -resize 200% ./flutter/assets/128x128@2x.png || true
-              cp ./flutter/assets/icon.svg ./res/scalable.svg
-              pushd ./flutter
-              if [[ "${{ matrix.job.arch }}" == "aarch64" ]]; then
-                export PATH="/opt/flutter-elinux/flutter/bin:$PATH"
-              fi
-              flutter pub get
-              dart run flutter_launcher_icons
-              popd
-            fi
+            flutter pub get
+            dart run flutter_launcher_icons
+            popd
 
             # Only run the whitelabeling steps if the custom app name is actually different
             if [ "${{ env.appname }}" != "rustdesk" ]; then
@@ -954,7 +949,6 @@ jobs:
         shell: bash
 
       - name: icon stuff
-        if: ${{ env.iconlink_url != 'false' }}
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 5
@@ -1260,19 +1254,15 @@ jobs:
             export DEB_ARCH=amd64
             mkdir -p flutter/tmpdeb/usr/share/rustdesk
             cp ./custom_.txt ./flutter/tmpdeb/usr/share/rustdesk/custom_.txt
-            if [[ "${{ env.logolink_url }}" != "false" ]]; then
-              cp ./branding/hynit-wordmark.png ./flutter/assets/logo.png
-            fi
-            if [[ "${{ env.iconlink_url }}" != "false" ]]; then
-              mv ./flutter/assets/icon.svg ./flutter/assets/icon.svg.bak
-              convert ./res/icon.png ./flutter/assets/icon.svg
-              convert ./res/128x128.png -resize 200% ./flutter/assets/128x128@2x.png || true
-              cp ./flutter/assets/icon.svg ./res/scalable.svg
-              pushd ./flutter
-              flutter pub get
-              dart run flutter_launcher_icons
-              popd
-            fi
+            cp ./branding/hynit-wordmark.png ./flutter/assets/logo.png
+            mv ./flutter/assets/icon.svg ./flutter/assets/icon.svg.bak
+            convert ./res/icon.png ./flutter/assets/icon.svg
+            convert ./res/128x128.png -resize 200% ./flutter/assets/128x128@2x.png || true
+            cp ./flutter/assets/icon.svg ./res/scalable.svg
+            pushd ./flutter
+            flutter pub get
+            dart run flutter_launcher_icons
+            popd
 
             if [ "${{ env.appname }}" != "rustdesk" ]; then
                 sed -ie "s|\(cp .* \)tmpdeb/usr/share/rustdesk/files/systemd/|\1tmpdeb/usr/share/rustdesk/files/systemd/${{ env.appname }}.service|g" build.py
@@ -1423,7 +1413,6 @@ jobs:
           mv ${{ env.filename }}-${{ matrix.job.arch }}.deb appimage/rustdesk.deb
 
       - name: icon stuff
-        if: ${{ env.iconlink_url != 'false' }}
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 5

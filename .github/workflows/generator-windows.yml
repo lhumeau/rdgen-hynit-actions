@@ -460,7 +460,6 @@ jobs:
           key: vcpkg-windows-${{ env.VCPKG_COMMIT_ID }}-${{ matrix.job.vcpkg-triplet }}
           
       - name: magick stuff
-        if: ${{ env.iconlink_url != 'false' }}
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 5
@@ -489,7 +488,6 @@ jobs:
 
 
       - name: ui.rs icon
-        if: ${{ env.iconlink_url != 'false' }}
         continue-on-error: true
         shell: bash
         run: |
@@ -545,7 +543,6 @@ jobs:
       #           </security>' ./flutter/windows/runner/runner.exe.manifest
 
       - name: replace flutter icons
-        if: ${{ env.iconlink_url != 'false' }}
         continue-on-error: true
         run: |
           cd ./flutter
@@ -615,7 +612,6 @@ jobs:
           }
 
       - name: icon stuff
-        if: ${{ env.iconlink_url != 'false' }}
         continue-on-error: true
         run: |
           mv ./rustdesk/data/flutter_assets/assets/icon.svg ./rustdesk/data/flutter_assets/assets/icon.svg.bak
@@ -627,7 +623,6 @@ jobs:
           cp ./res/icon.ico ./rustdesk/data/flutter_assets/assets/icon.ico
 
       - name: logo stuff
-        if: ${{ env.logolink_url != 'false' }}
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 5

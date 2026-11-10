@@ -7,8 +7,11 @@ Repository Actions secrets required by the workflows:
 - `GENURL=https://rdgen.hynit.com`
 - `ZIP_PASSWORD` matching the RDGen server's local `.env`
 - `RDGEN_CALLBACK_TOKEN` matching the RDGen server's local `.env`
-- `RDGEN_ZIP_URL`, a temporary presigned GET URL for the encrypted config archive in Contabo S3; remove it after the three setup jobs have downloaded the archive.
+
+Optional fallback: `RDGEN_ZIP_URL` can hold a temporary presigned GET URL for the encrypted config archive in Contabo S3 if Cloudflare blocks GitHub's RDGen callback request. Remove it after the setup jobs have downloaded the archive.
 
 The RDGen server supplies the client configuration and dispatches these workflows. The workflows upload installer outputs as short-lived GitHub artifacts instead of posting through the Cloudflare-protected RDGen hostname. The operator downloads and publishes the verified installers to Contabo S3 bucket `software` using Agency presigned PUTs.
+
+HYNIT icon and wordmark assets live in `branding/`. The Windows, macOS, and Linux workflows embed these local assets, so build runners do not fetch logo images from RDGen during compilation.
 
 The workflows and local actions are based on `bryangerlach/rdgen` and are licensed under GPL-3.0; see `LICENSE`.
